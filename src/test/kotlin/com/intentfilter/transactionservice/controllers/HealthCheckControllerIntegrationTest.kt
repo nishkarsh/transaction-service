@@ -11,7 +11,7 @@ import org.junit.jupiter.api.TestInstance
 import javax.ws.rs.core.Response
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-internal class HealthCheckControllerTest : JerseyTest(TransactionServiceApplication()) {
+internal class HealthCheckControllerIntegrationTest : JerseyTest(TransactionServiceApplication()) {
     @BeforeAll
     fun before() {
         super.setUp()

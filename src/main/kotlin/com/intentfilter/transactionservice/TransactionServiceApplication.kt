@@ -3,6 +3,7 @@ package com.intentfilter.transactionservice
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.BASE_URI
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.PORT
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.logger
+import com.intentfilter.transactionservice.providers.ServicesProvider
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory
 import org.glassfish.jersey.server.ResourceConfig
 import org.slf4j.Logger
@@ -20,6 +21,7 @@ class TransactionServiceApplication : ResourceConfig() {
 
     init {
         packages(RESOURCE_PACKAGES)
+        register(ServicesProvider)
     }
 }
 

@@ -2,18 +2,29 @@ package com.intentfilter.transactionservice.services
 
 import com.intentfilter.transactionservice.models.Account
 import com.intentfilter.transactionservice.models.Money
+import com.intentfilter.transactionservice.repositories.AccountRepository
 import java.util.*
+import javax.inject.Inject
+import javax.naming.OperationNotSupportedException
 
-open class AccountService {
-    open fun getAccountById(accountId: UUID): Account {
-        TODO("Get account ID from repository")
+open class AccountService @Inject constructor(private val repository: AccountRepository) {
+    open fun getAccountById(accountId: UUID): Account? {
+        return repository.findAccountById(accountId)
     }
 
     open fun debit(remitter: Account, amount: Money) {
-        TODO("Debit money from remitter account")
+        if (remitter.currencyCode != amount.currencyCode) {
+            throw OperationNotSupportedException("Cross-currency transactions are not supported.")
+        }
+
+        repository.deductFromBalance(remitter.id, amount.value)
     }
 
     open fun credit(beneficiary: Account, amount: Money) {
-        TODO("Credit money to beneficiary account")
+        if (beneficiary.currencyCode != amount.currencyCode) {
+            throw OperationNotSupportedException("Cross-currency transactions are not supported.")
+        }
+
+        repository.addToBalance(beneficiary.id, amount.value)
     }
 }

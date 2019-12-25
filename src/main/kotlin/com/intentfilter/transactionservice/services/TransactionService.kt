@@ -13,8 +13,8 @@ open class TransactionService @Inject constructor(
         val beneficiaryAccount = accountService.getAccountById(transaction.beneficiaryAccount.id)
 
         // TODO Start transaction with both Accounts Locked
-        accountService.debit(remitterAccount, Money(transaction.currencyCode, transaction.amount))
-        accountService.credit(beneficiaryAccount, Money(transaction.currencyCode, transaction.amount))
+        accountService.debit(remitterAccount!!, Money(transaction.currencyCode, transaction.amount))
+        accountService.credit(beneficiaryAccount!!, Money(transaction.currencyCode, transaction.amount))
         val createdTransaction = repository.create(transaction)
         // TODO Commit transaction and release lock
 

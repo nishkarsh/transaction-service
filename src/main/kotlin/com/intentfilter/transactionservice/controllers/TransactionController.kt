@@ -1,6 +1,7 @@
 package com.intentfilter.transactionservice.controllers
 
-import com.intentfilter.transactionservice.models.Transaction
+import com.intentfilter.transactionservice.converters.TransactionConverter
+import com.intentfilter.transactionservice.models.dtos.TransactionDTO
 import com.intentfilter.transactionservice.services.TransactionService
 import java.net.URI
 import javax.inject.Inject
@@ -17,8 +18,8 @@ class TransactionController @Inject constructor(private val service: Transaction
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    fun create(transaction: Transaction): Response {
-        val createdTransaction = service.create(transaction)
+    fun create(transactionRequest: TransactionDTO): Response {
+        val createdTransaction = service.create(TransactionConverter.from(transactionRequest))
         return Response.created(URI.create("/transaction/${createdTransaction.id}")).build()
     }
 }

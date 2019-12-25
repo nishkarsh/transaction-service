@@ -1,11 +1,28 @@
 package com.intentfilter.transactionservice.models
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import org.hibernate.annotations.CreationTimestamp
+import java.time.ZonedDateTime
 import java.util.*
+import javax.persistence.*
 
+@Entity
 data class Transaction(
-    @JsonProperty("id") val id: UUID?,
-    @JsonProperty("remitterAccountId") val remitterAccountId: UUID,
-    @JsonProperty("beneficiaryAccountId") val beneficiaryAccountId: UUID,
-    @JsonProperty("amount") val amount: Money
+    @Id
+    @GeneratedValue(generator = "uuid2")
+    val id: UUID?,
+
+    @ManyToOne @JoinColumn(name = "remittedAccountId")
+    val remitterAccount: Account,
+
+    @ManyToOne @JoinColumn(name = "beneficiaryAccountId")
+    val beneficiaryAccount: Account,
+
+    @Column(nullable = false)
+    val amount: Double,
+
+    @Column(nullable = false)
+    val currencyCode: CurrencyCode,
+
+    @CreationTimestamp
+    val createdAt: ZonedDateTime? = null
 )

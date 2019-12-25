@@ -1,6 +1,8 @@
 package com.intentfilter.transactionservice.controllers
 
+import com.intentfilter.transactionservice.converters.TransactionConverter
 import com.intentfilter.transactionservice.models.Transaction
+import com.intentfilter.transactionservice.models.dtos.TransactionDTO
 import com.intentfilter.transactionservice.services.TransactionService
 import io.github.glytching.junit.extension.random.Random
 import io.github.glytching.junit.extension.random.RandomBeansExtension
@@ -24,8 +26,8 @@ internal class TransactionControllerTest {
     private lateinit var controller: TransactionController
 
     @Test
-    internal fun shouldCreateTransaction(@Random transaction: Transaction, @Random createdTransaction: Transaction) {
-        `when`(service.create(transaction)).thenReturn(createdTransaction)
+    internal fun shouldCreateTransaction(@Random transaction: TransactionDTO, @Random createdTransaction: Transaction) {
+        `when`(service.create(TransactionConverter.from(transaction))).thenReturn(createdTransaction)
 
         val response = controller.create(transaction)
 

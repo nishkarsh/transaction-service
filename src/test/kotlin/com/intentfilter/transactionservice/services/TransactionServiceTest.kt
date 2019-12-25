@@ -1,6 +1,7 @@
 package com.intentfilter.transactionservice.services
 
 import com.intentfilter.transactionservice.models.Account
+import com.intentfilter.transactionservice.models.Money
 import com.intentfilter.transactionservice.models.Transaction
 import com.intentfilter.transactionservice.repositories.TransactionRepository
 import io.github.glytching.junit.extension.random.Random
@@ -31,15 +32,15 @@ internal class TransactionServiceTest {
         @Random transaction: Transaction, @Random remitter: Account, @Random beneficiary: Account, @Random transactionId: UUID
     ) {
         val createdTransaction = transaction.copy(id = transactionId)
-        `when`(accountService.getAccountById(transaction.remitterAccountId)).thenReturn(remitter)
-        `when`(accountService.getAccountById(transaction.beneficiaryAccountId)).thenReturn(beneficiary)
+        `when`(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(remitter)
+        `when`(accountService.getAccountById(transaction.beneficiaryAccount.id)).thenReturn(beneficiary)
         `when`(repository.create(transaction)).thenReturn(createdTransaction)
 
         val returnedTransaction = transactionService.create(transaction)
 
         val inOrder = inOrder(accountService)
-        inOrder.verify(accountService).debit(remitter, transaction.amount)
-        inOrder.verify(accountService).credit(beneficiary, transaction.amount)
+        inOrder.verify(accountService).debit(remitter, Money(transaction.currencyCode, transaction.amount))
+        inOrder.verify(accountService).credit(beneficiary, Money(transaction.currencyCode, transaction.amount))
         assertThat(returnedTransaction, `is`(createdTransaction))
     }
 }

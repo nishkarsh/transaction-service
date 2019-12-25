@@ -2,17 +2,22 @@ package com.intentfilter.transactionservice.repositories
 
 import com.intentfilter.transactionservice.models.Account
 import java.util.*
+import javax.inject.Inject
+import javax.persistence.EntityManager
+import javax.persistence.criteria.Path
 
-open class AccountRepository {
+open class AccountRepository @Inject constructor(private val entityManager: EntityManager) {
     open fun findAccountById(id: UUID): Account? {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return entityManager.find(Account::class.java, id)
     }
 
-    open fun deductFromBalance(accountId: UUID, amount: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    open fun setAccountBalance(accountId: UUID, amount: Double) {
+        val criteriaBuilder = entityManager.criteriaBuilder
 
-    open fun addToBalance(accountId: UUID, amount: Double) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        with(criteriaBuilder.createCriteriaUpdate(Account::class.java)) {
+            val value: Path<UUID> = from(Account::class.java)[Account.ID]
+            where(criteriaBuilder.equal(value, accountId)).set(Account.BALANCE, amount)
+            entityManager.createQuery(this).executeUpdate()
+        }
     }
 }

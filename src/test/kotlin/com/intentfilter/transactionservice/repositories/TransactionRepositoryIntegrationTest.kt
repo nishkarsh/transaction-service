@@ -1,6 +1,7 @@
 package com.intentfilter.transactionservice.repositories
 
 import com.intentfilter.transactionservice.TransactionServiceApplication
+import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.PERSISTENT_UNIT
 import com.intentfilter.transactionservice.models.Account
 import com.intentfilter.transactionservice.models.Transaction
 import io.github.glytching.junit.extension.random.Random
@@ -24,7 +25,7 @@ internal class TransactionRepositoryIntegrationTest : JerseyTest(TransactionServ
 
     @BeforeEach
     override fun setUp() {
-        entityManagerFactory = Persistence.createEntityManagerFactory("transactions")
+        entityManagerFactory = Persistence.createEntityManagerFactory(PERSISTENT_UNIT)
         transactionRepository = TransactionRepository(entityManagerFactory.createEntityManager())
     }
 

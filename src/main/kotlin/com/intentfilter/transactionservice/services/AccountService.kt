@@ -17,7 +17,10 @@ open class AccountService @Inject constructor(private val repository: AccountRep
             throw OperationNotSupportedException("Cross-currency transactions are not supported.")
         }
 
-        repository.deductFromBalance(remitter.id, amount.value)
+        remitter.balance!!.minus(amount.value).let { updatedBalance ->
+            if ((insufficientBalance(updatedBalance))) throw IllegalArgumentException("The requested amount could not be debited due to insufficient balance in account.")
+            else repository.setAccountBalance(remitter.id, updatedBalance)
+        }
     }
 
     open fun credit(beneficiary: Account, amount: Money) {
@@ -25,6 +28,10 @@ open class AccountService @Inject constructor(private val repository: AccountRep
             throw OperationNotSupportedException("Cross-currency transactions are not supported.")
         }
 
-        repository.addToBalance(beneficiary.id, amount.value)
+        beneficiary.balance!!.plus(amount.value).let { updatedBalance ->
+            repository.setAccountBalance(beneficiary.id, updatedBalance)
+        }
     }
+
+    private fun insufficientBalance(balance: Double) = balance < 0
 }

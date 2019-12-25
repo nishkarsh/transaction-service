@@ -13,6 +13,7 @@ import javax.persistence.Id
 data class Account(
     @Id
     @GeneratedValue(generator = "uuid2")
+    @Column(name = ID)
     val id: UUID,
 
     @Column(nullable = false)
@@ -21,7 +22,7 @@ data class Account(
     @Column(nullable = false)
     val currencyCode: CurrencyCode? = null,
 
-    @Column(nullable = false, precision = 4)
+    @Column(name = BALANCE, nullable = false, precision = 4)
     val balance: Double? = null,
 
     @Column(nullable = false)
@@ -32,4 +33,9 @@ data class Account(
 
     @UpdateTimestamp
     val updatedAt: ZonedDateTime? = null
-)
+) {
+    companion object {
+        const val BALANCE = "balance"
+        const val ID = "id"
+    }
+}

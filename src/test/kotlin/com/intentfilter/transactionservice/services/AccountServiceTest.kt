@@ -38,17 +38,28 @@ internal class AccountServiceTest {
     }
 
     @Test
-    internal fun shouldDebitMoneyFromRemitterAccount(@Random account: Account, @Random money: Money) {
-        service.debit(account, money.copy(currencyCode = account.currencyCode!!))
+    internal fun shouldDebitMoneyFromRemitterAccount(@Random account: Account) {
+        val amount = Money(account.currencyCode!!, 40.0)
 
-        verify(repository).deductFromBalance(account.id, money.value)
+        service.debit(account.copy(balance = 100.0), amount)
+
+        verify(repository).setAccountBalance(account.id, 60.0)
     }
 
     @Test
-    internal fun shouldCreditMoneyToBeneficiaryAccount(@Random account: Account, @Random money: Money) {
-        service.credit(account, money.copy(currencyCode = account.currencyCode!!))
+    internal fun shouldCreditMoneyToBeneficiaryAccount(@Random account: Account) {
+        val amount = Money(account.currencyCode!!, 40.0)
 
-        verify(repository).addToBalance(account.id, money.value)
+        service.credit(account.copy(balance = 100.0), amount)
+
+        verify(repository).setAccountBalance(account.id, 140.0)
+    }
+
+    @Test
+    internal fun shouldThrowErrorOnInsufficientBalance(@Random account: Account) {
+        assertThrows<IllegalArgumentException> {
+            service.debit(account.copy(balance = 10.0), Money(account.currencyCode!!, 11.0))
+        }
     }
 
     @Test

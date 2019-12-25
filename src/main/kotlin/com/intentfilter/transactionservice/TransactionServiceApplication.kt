@@ -18,6 +18,7 @@ class TransactionServiceApplication : ResourceConfig() {
         const val PORT = 9000
         const val BASE_URI = "http://localhost/"
         const val RESOURCE_PACKAGES = "com.intentfilter"
+        const val PERSISTENT_UNIT = "transactions"
 
         val logger: Logger = LoggerFactory.getLogger(TransactionServiceApplication::class.java)
     }

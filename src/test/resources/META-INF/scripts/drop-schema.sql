@@ -1,0 +1,2 @@
+drop table TRANSACTION IF EXISTS
+drop table ACCOUNT IF EXISTS

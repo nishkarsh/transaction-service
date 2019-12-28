@@ -10,24 +10,18 @@
 
         <properties>
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:h2:mem:transaction-service"/>
-            <property name="hibernate.connection.user" value="readWriteUser"/>
+            <property name="hibernate.connection.url" value="jdbc:h2:mem:test-transaction-service"/>
+            <property name="hibernate.connection.user" value="testUser"/>
             <property name="hibernate.connection.password" value=""/>
 
-            <property name="javax.persistence.sql-load-script-source" value="META-INF/scripts/load-data.sql"/>
+            <property name="javax.persistence.schema-generation.database.action" value="create"/>
+            <property name="javax.persistence.schema-generation.create-script-source"
+                      value="META-INF/scripts/create-schema.sql"/>
 
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>
-            <property name="hibernate.hbm2ddl.auto" value="create"/>
-            <property name="hibernate.show_sql" value="false"/>
+            <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="false"/>
             <property name="hibernate.temp.use_jdbc_metadata_defaults" value="false"/>
-
-            <!-- Configuring Connection Pool -->
-            <property name="hibernate.c3p0.min_size" value="5"/>
-            <property name="hibernate.c3p0.max_size" value="20"/>
-            <property name="hibernate.c3p0.timeout" value="500"/>
-            <property name="hibernate.c3p0.max_statements" value="50"/>
-            <property name="hibernate.c3p0.idle_test_period" value="2000"/>
         </properties>
     </persistence-unit>
 </persistence>

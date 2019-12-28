@@ -46,7 +46,7 @@ internal class TransactionServiceTest {
     }
 
     @Test
-    internal fun shouldThrowErrorWhenRemitterAccountNotFound(@Random transaction: Transaction, @Random beneficiary: Account) {
+    internal fun shouldThrowErrorWhenRemitterAccountNotFound(@Random transaction: Transaction) {
         whenever(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(null)
 
         assertThrows<NotFoundException> { transactionService.create(transaction) }

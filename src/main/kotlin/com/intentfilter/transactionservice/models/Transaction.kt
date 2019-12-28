@@ -11,7 +11,7 @@ data class Transaction(
     @GeneratedValue(generator = "uuid2")
     val id: UUID?,
 
-    @ManyToOne @JoinColumn(name = "remittedAccountId")
+    @ManyToOne @JoinColumn(name = "remitterAccountId")
     val remitterAccount: Account,
 
     @ManyToOne @JoinColumn(name = "beneficiaryAccountId")

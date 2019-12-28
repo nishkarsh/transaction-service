@@ -18,6 +18,7 @@ import org.mockito.InjectMocks
 import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
+import javax.transaction.TransactionManager
 
 @Extensions(ExtendWith(MockitoExtension::class), ExtendWith(RandomBeansExtension::class))
 internal class TransactionServiceTest {
@@ -25,6 +26,9 @@ internal class TransactionServiceTest {
     private lateinit var repository: TransactionRepository
     @Mock
     private lateinit var accountService: AccountService
+    @Mock
+    private lateinit var transactionManager: TransactionManager
+
     @InjectMocks
     private lateinit var transactionService: TransactionService
 

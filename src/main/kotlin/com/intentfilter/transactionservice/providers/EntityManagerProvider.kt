@@ -4,6 +4,7 @@ import com.intentfilter.transactionservice.TransactionServiceApplication.Compani
 import org.glassfish.hk2.api.Factory
 import org.glassfish.hk2.utilities.binding.AbstractBinder
 import org.glassfish.jersey.process.internal.RequestScoped
+import org.slf4j.LoggerFactory
 import javax.persistence.EntityManager
 import javax.persistence.Persistence
 
@@ -13,12 +14,16 @@ object EntityManagerProvider : AbstractBinder() {
     }
 }
 
-internal class EntityManagerFactory : Factory<EntityManager> {
+class EntityManagerFactory : Factory<EntityManager> {
+    private val logger = LoggerFactory.getLogger(EntityManagerProvider::class.java)
+
     override fun provide(): EntityManager {
+        logger.info("Providing an instance of EntityManager")
         return Persistence.createEntityManagerFactory(PERSISTENT_UNIT).createEntityManager()
     }
 
     override fun dispose(instance: EntityManager?) {
+        logger.info("Disposing an instance of EntityManager")
         instance?.close()
     }
 }

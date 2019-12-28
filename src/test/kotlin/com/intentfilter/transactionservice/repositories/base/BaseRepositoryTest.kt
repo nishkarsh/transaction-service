@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import javax.persistence.EntityManager
 import javax.persistence.Persistence
 
-open class BaseIntegrationTest : JerseyTest(TransactionServiceApplication()) {
+open class BaseRepositoryTest : JerseyTest(TransactionServiceApplication()) {
     private val transactionManager = transactionManager()
     protected lateinit var entityManager: EntityManager
 

@@ -2,7 +2,7 @@ package com.intentfilter.transactionservice.repositories
 
 import com.intentfilter.transactionservice.models.Account
 import com.intentfilter.transactionservice.models.Transaction
-import com.intentfilter.transactionservice.repositories.base.BaseIntegrationTest
+import com.intentfilter.transactionservice.repositories.base.BaseRepositoryTest
 import io.github.glytching.junit.extension.random.Random
 import io.github.glytching.junit.extension.random.RandomBeansExtension
 import org.hamcrest.core.Is.`is`
@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(RandomBeansExtension::class)
-internal class TransactionRepositoryIntegrationTest : BaseIntegrationTest() {
+internal class TransactionRepositoryRepositoryTest : BaseRepositoryTest() {
     private lateinit var transactionRepository: TransactionRepository
 
     @BeforeEach

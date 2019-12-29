@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(RandomBeansExtension::class)
-internal class TransactionRepositoryRepositoryTest : BaseRepositoryTest() {
+internal class TransactionRepositoryTest : BaseRepositoryTest() {
     private lateinit var transactionRepository: TransactionRepository
 
     @BeforeEach

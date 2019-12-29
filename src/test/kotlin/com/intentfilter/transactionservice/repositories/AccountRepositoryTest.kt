@@ -2,6 +2,7 @@ package com.intentfilter.transactionservice.repositories
 
 import com.intentfilter.transactionservice.models.Account
 import com.intentfilter.transactionservice.repositories.base.BaseRepositoryTest
+import com.intentfilter.transactionservice.utilities.AccountsProvider
 import io.github.glytching.junit.extension.random.Random
 import io.github.glytching.junit.extension.random.RandomBeansExtension
 import org.hamcrest.core.Is.`is`
@@ -12,7 +13,8 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(RandomBeansExtension::class)
-internal class AccountRepositoryRepositoryTest : BaseRepositoryTest() {
+internal class AccountRepositoryTest : BaseRepositoryTest() {
+    private lateinit var accountsProvider: AccountsProvider
     private lateinit var accountRepository: AccountRepository
 
     @BeforeEach
@@ -36,11 +38,12 @@ internal class AccountRepositoryRepositoryTest : BaseRepositoryTest() {
     @Test
     internal fun shouldSetAccountBalance(@Random(excludes = ["id"]) account: Account) {
         entityManager.persist(account)
+
         accountRepository.setAccountBalance(account.id, 79.59)
+
         entityManager.refresh(account)
-
-        val updatedAccount = accountRepository.findAccountById(account.id)
-
-        assertThat(updatedAccount?.balance, `is`(79.59))
+        with(accountRepository.findAccountById(account.id)!!) {
+            assertThat(balance, `is`(79.59))
+        }
     }
 }

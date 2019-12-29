@@ -6,12 +6,17 @@ import com.intentfilter.transactionservice.repositories.TransactionRepository
 import javassist.NotFoundException
 import javax.inject.Inject
 import javax.transaction.TransactionManager
+import javax.ws.rs.NotAllowedException
 
 open class TransactionService @Inject constructor(
     private val repository: TransactionRepository, private val accountService: AccountService,
     private val transactionManager: TransactionManager
 ) {
     open fun create(transaction: Transaction): Transaction {
+        if (isRemitterSameAsBeneficiary(transaction)) {
+            throw NotAllowedException("Account transfers from an account to same account is not allowed")
+        }
+
         transactionManager.begin()
 
         val remitterAccount = accountService.getAccountById(transaction.remitterAccount.id)
@@ -28,4 +33,7 @@ open class TransactionService @Inject constructor(
 
         return createdTransaction
     }
+
+    private fun isRemitterSameAsBeneficiary(transaction: Transaction) =
+        transaction.beneficiaryAccount.id == transaction.remitterAccount.id
 }

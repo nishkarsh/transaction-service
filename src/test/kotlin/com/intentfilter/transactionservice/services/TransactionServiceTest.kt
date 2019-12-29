@@ -19,6 +19,7 @@ import org.mockito.Mock
 import org.mockito.junit.jupiter.MockitoExtension
 import java.util.*
 import javax.transaction.TransactionManager
+import javax.ws.rs.NotAllowedException
 
 @Extensions(ExtendWith(MockitoExtension::class), ExtendWith(RandomBeansExtension::class))
 internal class TransactionServiceTest {
@@ -65,6 +66,16 @@ internal class TransactionServiceTest {
         whenever(accountService.getAccountById(transaction.beneficiaryAccount.id)).thenReturn(null)
 
         assertThrows<NotFoundException> { transactionService.create(transaction) }
+
+        verify(accountService, never()).debit(any(), any())
+        verify(accountService, never()).credit(any(), any())
+    }
+
+    @Test
+    internal fun shouldThrowErrorIfRemitterSameAsBeneficiary(@Random transaction: Transaction, @Random account: Account) {
+        assertThrows<NotAllowedException> {
+            transactionService.create(transaction.copy(remitterAccount = account, beneficiaryAccount = account))
+        }
 
         verify(accountService, never()).debit(any(), any())
         verify(accountService, never()).credit(any(), any())

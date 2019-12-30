@@ -7,6 +7,7 @@ import com.intentfilter.transactionservice.models.Transaction
 import com.intentfilter.transactionservice.models.dtos.TransactionDTO
 import com.intentfilter.transactionservice.utilities.AccountsProvider.AccountPair
 import com.intentfilter.transactionservice.utilities.AccountsProvider.AccountPairProvider
+import com.intentfilter.transactionservice.utilities.AccountsProvider.AccountPairProvider.Companion.users
 import org.hamcrest.core.Is.`is`
 import org.junit.Assert
 import org.junit.jupiter.api.Assertions
@@ -51,6 +52,9 @@ class TransactionControllerConcurrencyTest : BaseControllerTest() {
         Assert.assertThat(getTotalAccountBalance(), `is`(2628.0))
     }
 
-    private fun getTotalAccountBalance(): Double = entityManager.createQuery("SELECT balance FROM Account")
-        .resultList.reduce { totalBalance, accountBalance -> totalBalance as Double + accountBalance as Double } as Double
+    private fun getTotalAccountBalance(): Double {
+        return entityManager.createQuery("SELECT balance FROM Account account WHERE account.userId IN (:users)")
+            .setParameter("users", users.asList())
+            .resultList.reduce { totalBalance, accountBalance -> totalBalance as Double + accountBalance as Double } as Double
+    }
 }

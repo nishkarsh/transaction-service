@@ -12,6 +12,7 @@ import org.jeasy.random.FieldPredicates
 import org.junit.jupiter.api.extension.ExtensionContext
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.ArgumentsProvider
+import java.util.UUID.fromString
 import java.util.stream.Stream
 import javax.persistence.EntityManager
 import javax.persistence.Persistence.createEntityManagerFactory
@@ -41,15 +42,15 @@ class AccountsProvider(private val entityManager: EntityManager) {
         init {
             transactionManager().begin()
             accountsPool = arrayOf(
-                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 130.0)
+                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 130.0, userId = users[0])
                     .also { setField(it, "id", null) }.also { entityManager.persist(it) },
-                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 500.0)
+                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 500.0, userId = users[1])
                     .also { setField(it, "id", null) }.also { entityManager.persist(it) },
-                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 1002.0)
+                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 1002.0, userId = users[2])
                     .also { setField(it, "id", null) }.also { entityManager.persist(it) },
-                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 976.0)
+                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 976.0, userId = users[3])
                     .also { setField(it, "id", null) }.also { entityManager.persist(it) },
-                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 20.0)
+                easyRandom.nextObject(Account::class.java).copy(currencyCode = EUR, balance = 20.0, userId = users[4])
                     .also { setField(it, "id", null) }.also { entityManager.persist(it) }
             )
             transactionManager().commit()
@@ -68,6 +69,16 @@ class AccountsProvider(private val entityManager: EntityManager) {
                 AccountPair(accountsPool[4], accountsPool[0]),
                 AccountPair(accountsPool[2], accountsPool[4])
             ).map { Arguments.of(it) }
+        }
+
+        companion object {
+            val users = arrayOf(
+                fromString("d25a5c64-715f-4081-b072-95ecd27f15ba"),
+                fromString("0f88d688-c919-47a3-b2c0-ef85101832af"),
+                fromString("48acab0e-314d-43ff-b9f6-61a7aa367620"),
+                fromString("0b4499fd-d529-435b-bd09-f78b2ad28111"),
+                fromString("93955be6-b7b4-4d89-b533-e72c6bb27357")
+            )
         }
     }
 

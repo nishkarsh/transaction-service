@@ -66,6 +66,13 @@ internal class TransactionServiceTest {
     }
 
     @Test
+    internal fun shouldRollbackTransactionOnUnsuccessfulTransfer(@Random transaction: Transaction) {
+        assertThrows<NotFoundException> { transactionService.create(transaction) }
+
+        verify(transactionManager).rollback()
+    }
+
+    @Test
     internal fun shouldThrowErrorWhenRemitterAccountNotFound(@Random transaction: Transaction) {
         whenever(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(null)
 

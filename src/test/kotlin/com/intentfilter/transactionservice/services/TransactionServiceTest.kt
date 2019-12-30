@@ -52,7 +52,7 @@ internal class TransactionServiceTest {
 
     @Test
     internal fun shouldAcquireLockOnAccountsBeforeTransfer(
-        @Random transaction: Transaction, @Random remitter: Account, @Random beneficiary: Account, @Random transactionId: UUID
+        @Random transaction: Transaction, @Random remitter: Account, @Random beneficiary: Account
     ) {
         whenever(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(remitter)
         whenever(accountService.getAccountById(transaction.beneficiaryAccount.id)).thenReturn(beneficiary)

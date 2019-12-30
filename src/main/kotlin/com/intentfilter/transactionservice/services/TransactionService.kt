@@ -18,20 +18,17 @@ open class TransactionService @Inject constructor(
         }
 
         transactionManager.begin()
+        accountService.acquireLock(transaction.remitterAccount.id, transaction.beneficiaryAccount.id)
 
         val remitterAccount = accountService.getAccountById(transaction.remitterAccount.id)
             ?: throw NotFoundException("Account with ID ${transaction.remitterAccount.id} does not exist")
-
         val beneficiaryAccount = accountService.getAccountById(transaction.beneficiaryAccount.id)
             ?: throw NotFoundException("Account with ID ${transaction.beneficiaryAccount.id} does not exist")
 
         accountService.debit(remitterAccount, Money(transaction.currencyCode, transaction.amount))
         accountService.credit(beneficiaryAccount, Money(transaction.currencyCode, transaction.amount))
-        val createdTransaction = repository.create(transaction)
 
-        transactionManager.commit()
-
-        return createdTransaction
+        return repository.create(transaction).also { transactionManager.commit() }
     }
 
     private fun isRemitterSameAsBeneficiary(transaction: Transaction) =

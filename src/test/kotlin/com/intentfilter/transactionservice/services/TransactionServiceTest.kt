@@ -51,6 +51,21 @@ internal class TransactionServiceTest {
     }
 
     @Test
+    internal fun shouldAcquireLockOnAccountsBeforeTransfer(
+        @Random transaction: Transaction, @Random remitter: Account, @Random beneficiary: Account, @Random transactionId: UUID
+    ) {
+        whenever(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(remitter)
+        whenever(accountService.getAccountById(transaction.beneficiaryAccount.id)).thenReturn(beneficiary)
+
+        transactionService.create(transaction)
+
+        val inOrder = inOrder(accountService)
+        inOrder.verify(accountService).acquireLock(transaction.remitterAccount.id, transaction.beneficiaryAccount.id)
+        inOrder.verify(accountService).debit(remitter, Money(transaction.currencyCode, transaction.amount))
+        inOrder.verify(accountService).credit(beneficiary, Money(transaction.currencyCode, transaction.amount))
+    }
+
+    @Test
     internal fun shouldThrowErrorWhenRemitterAccountNotFound(@Random transaction: Transaction) {
         whenever(accountService.getAccountById(transaction.remitterAccount.id)).thenReturn(null)
 

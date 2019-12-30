@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory
 import javax.persistence.EntityManager
 import javax.persistence.Persistence
 
-object EntityManagerProvider : AbstractBinder() {
+class EntityManagerProvider : AbstractBinder() {
     override fun configure() {
         bindFactory(EntityManagerFactory::class.java).to(EntityManager::class.java).`in`(RequestScoped::class.java)
     }

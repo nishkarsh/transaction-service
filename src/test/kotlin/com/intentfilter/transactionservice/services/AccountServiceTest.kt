@@ -38,6 +38,13 @@ internal class AccountServiceTest {
     }
 
     @Test
+    internal fun shouldAcquireLockOnAccounts(@Random accountIdOne: UUID, @Random accountIdTwo: UUID) {
+        service.acquireLock(accountIdOne, accountIdTwo)
+
+        verify(repository).acquireLock(accountIdOne, accountIdTwo)
+    }
+
+    @Test
     internal fun shouldDebitMoneyFromRemitterAccount(@Random account: Account) {
         val amount = Money(account.currencyCode!!, 40.0)
 

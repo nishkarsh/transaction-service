@@ -4,6 +4,7 @@ import com.intentfilter.transactionservice.models.Account
 import java.util.*
 import javax.inject.Inject
 import javax.persistence.EntityManager
+import javax.persistence.LockModeType.PESSIMISTIC_WRITE
 import javax.persistence.criteria.Path
 
 open class AccountRepository @Inject constructor(private val entityManager: EntityManager) {
@@ -15,9 +16,16 @@ open class AccountRepository @Inject constructor(private val entityManager: Enti
         val criteriaBuilder = entityManager.criteriaBuilder
 
         with(criteriaBuilder.createCriteriaUpdate(Account::class.java)) {
-            val value: Path<UUID> = from(Account::class.java)[Account.ID]
-            where(criteriaBuilder.equal(value, accountId)).set(Account.BALANCE, amount)
+            val accountIdField: Path<UUID> = from(Account::class.java)[Account.ID]
+            where(criteriaBuilder.equal(accountIdField, accountId)).set(Account.BALANCE, amount)
             entityManager.createQuery(this).executeUpdate()
         }
+    }
+
+    open fun acquireLock(vararg accountIds: UUID) {
+        entityManager.createQuery("Select account From Account account WHERE account.id IN :accountIds")
+            .setParameter("accountIds", accountIds.asList())
+            .setLockMode(PESSIMISTIC_WRITE)
+            .resultList
     }
 }

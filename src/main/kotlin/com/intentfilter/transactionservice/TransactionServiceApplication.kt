@@ -3,7 +3,10 @@ package com.intentfilter.transactionservice
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.BASE_URI
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.PORT
 import com.intentfilter.transactionservice.TransactionServiceApplication.Companion.logger
-import com.intentfilter.transactionservice.providers.*
+import com.intentfilter.transactionservice.providers.EntityManagerProvider
+import com.intentfilter.transactionservice.providers.RepositoriesProvider
+import com.intentfilter.transactionservice.providers.ServicesProvider
+import com.intentfilter.transactionservice.providers.TransactionManagerProvider
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory
 import org.glassfish.jersey.server.ResourceConfig
 import org.slf4j.Logger
@@ -23,8 +26,7 @@ class TransactionServiceApplication : ResourceConfig() {
     init {
         packages(RESOURCE_PACKAGES)
         registerInstances(
-            ServicesProvider, RepositoriesProvider, EntityManagerProvider, ExceptionHandlerProvider,
-            TransactionManagerProvider
+            ServicesProvider(), RepositoriesProvider(), EntityManagerProvider(), TransactionManagerProvider()
         )
     }
 }

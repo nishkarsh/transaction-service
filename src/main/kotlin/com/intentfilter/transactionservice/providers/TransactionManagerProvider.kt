@@ -5,7 +5,7 @@ import org.glassfish.hk2.api.Factory
 import org.glassfish.hk2.utilities.binding.AbstractBinder
 import javax.transaction.TransactionManager
 
-object TransactionManagerProvider : AbstractBinder() {
+class TransactionManagerProvider : AbstractBinder() {
     override fun configure() {
         bindFactory(TransactionManagerFactory::class.java).to(TransactionManager::class.java)
     }

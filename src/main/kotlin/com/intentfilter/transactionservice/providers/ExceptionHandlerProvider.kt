@@ -6,7 +6,7 @@ import javax.ws.rs.ext.ExceptionMapper
 import javax.ws.rs.ext.Provider
 
 @Provider
-object ExceptionHandlerProvider : Throwable(), ExceptionMapper<Throwable> {
+class ExceptionHandlerProvider : Throwable(), ExceptionMapper<Throwable> {
     private val logger = LoggerFactory.getLogger(ExceptionHandlerProvider::class.java)
 
     override fun toResponse(exception: Throwable?): Response {

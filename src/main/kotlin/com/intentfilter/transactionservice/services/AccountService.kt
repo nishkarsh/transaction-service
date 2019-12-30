@@ -33,5 +33,9 @@ open class AccountService @Inject constructor(private val repository: AccountRep
         }
     }
 
+    open fun acquireLock(remitterAccountId: UUID, beneficiaryAccountId: UUID) {
+        repository.acquireLock(remitterAccountId, beneficiaryAccountId)
+    }
+
     private fun insufficientBalance(balance: Double) = balance < 0
 }

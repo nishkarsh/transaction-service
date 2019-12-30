@@ -1,4 +1,4 @@
-# transaction-service ![Build Status](https://travis-ci.org/nishkarsh/transaction-service.svg?branch=master) [Only for Demonstration]
+# transaction-service [![Build Status](https://travis-ci.org/nishkarsh/transaction-service.svg?branch=master)](https://travis-ci.org/nishkarsh/transaction-service) [Only for Demonstration]
 A sample TransactionService based on Jersey and embedded HttpServer that exposes APIs to transfer amount from one account to another.
 
 ### Building the Project

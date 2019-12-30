@@ -18,12 +18,12 @@ class EntityManagerFactory : Factory<EntityManager> {
     private val logger = LoggerFactory.getLogger(EntityManagerProvider::class.java)
 
     override fun provide(): EntityManager {
-        logger.info("Providing an instance of EntityManager")
+        logger.debug("Providing an instance of EntityManager")
         return Persistence.createEntityManagerFactory(PERSISTENT_UNIT).createEntityManager()
     }
 
     override fun dispose(instance: EntityManager?) {
-        logger.info("Disposing an instance of EntityManager")
+        logger.debug("Disposing an instance of EntityManager")
         instance?.close()
     }
 }
